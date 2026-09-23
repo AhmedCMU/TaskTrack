@@ -1,3 +1,5 @@
 Complete ICA04
 Review GitHub commands
-Update the TaskTrack README 
+Update the TaskTrack README
+Test persistent storage
+I like to test before push
