@@ -1,6 +1,6 @@
 # TaskTrack
 
-is like a command line task that allows the user to add and view the tasks
+TaskTrack is like a command-line that allows the user to add and view the tasks
 
 ## Current Features
 
