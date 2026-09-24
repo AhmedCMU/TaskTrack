@@ -3,3 +3,4 @@ Review GitHub commands
 Update the TaskTrack README
 Test persistent storage
 I like to test before push
+class end will be December
