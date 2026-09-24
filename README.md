@@ -45,6 +45,10 @@ TaskTrack uses tasks.txt to keep tasks after the program closes.
 
 When the program starts, load_tasks() checks tasks.txt and loads each non-empty line into the task list. When a new task is added, save_tasks() writes the tasks to tasks.txt, with each task stored on its own line.
 
+## Version Control
+
+Git allows changes to be tracked on the computer. A commit saves a group of changes to the local Git history. A push sends committed changes from the local repository to GitHub.
+
 ## Current Limitation
 
 When the program closed the task is not saved, the tasks are stored only when the program is running
