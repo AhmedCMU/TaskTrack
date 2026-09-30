@@ -20,3 +20,27 @@ def check_guess(guess, secret_number):
     return "Too high" 
   else:
     return "Correct"
+  
+  
+def play_game(secret_number, guess):
+    return check_guess(guess, secret_number) 
+  
+def get_guess(guess):
+    return int(guess)
+def run_game():
+    secret_number = generate_number()
+
+    while True:
+        guess = input("Enter your guess: ")
+        guess = get_guess(guess)
+
+        if not is_valid_guess(guess):
+            print("Invalid guess. Enter an odd number between 1 and 1000.")
+            continue
+
+        result = check_guess(guess, secret_number)
+        print(result)
+
+        if result == "Correct":
+            break
+run_game()
