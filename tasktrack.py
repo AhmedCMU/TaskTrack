@@ -3,7 +3,7 @@
 Author: Chala Ahmed
 Course: CPS 310
 """
-TASKS_FILE = "tasks.txt" 
+TASKS_FILE = "tasks.txts" 
 
 def display_menu():
     """Display the available TaskTrack menu options."""
