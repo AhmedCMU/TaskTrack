@@ -30,7 +30,7 @@ def view_tasks(tasks):
     """Display all tasks currently stored in the task list."""
     if not tasks:
       print("No task found")
-        #TODO: Display the empty-list message.
+        
       return
 
     print("\nTasks:")
@@ -49,8 +49,7 @@ def load_tasks(filename):
                 if task:
                  tasks.append(task)  
            
-                #TODO: Ignore blank lines.
-                #TODO: Add each non-empty task to the tasks list.
+                
     except FileNotFoundError:
         # A new project may not have a task file yet.
         return []
@@ -62,8 +61,7 @@ def load_tasks(filename):
 def save_tasks(tasks, filename):
     """Save all tasks to a text file."""
     with open(filename, "w") as file:
-        #TODO: Loop through the tasks list.
-        #TODO: Write each task followed by a newline character.
+     
         for task in tasks:
             file.write(f"{task}\n") 
             
@@ -83,22 +81,21 @@ def remove_task(tasks):
         print("Please enter a valid task number.")
         return False
 
-    #TODO: Reject input that is not numeric.
+    
 
     task_number = int(selection)
 
-    #TODO: Reject numbers outside the valid task range.
+   
     if task_number < 1 or task_number > len(tasks):
         print("Invalid task number.")
         return False
 
 
-    #TODO: Remove the selected task from the list.
+    
     removed_task = tasks.pop(task_number - 1)
-    # Remember that displayed task numbers begin at 1,
-    # while Python list indexes begin at 0.
+  
 
-    #TODO: Display a confirmation containing the removed task.
+    
     print(f"Removed task: {removed_task}")
 
     return True
