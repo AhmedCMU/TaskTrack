@@ -1,78 +1,124 @@
-from tasktrack import remove_task_by_number
-def test_remove_first_task():
-  # Arrange
-    tasks = ["Study", "Exercise", "Read"]
-    expected_task = "Study"
-    #Act
-    removed_task = remove_task_by_number(tasks, 1)
-    #Assert
-    assert removed_task == "Study"
-    assert tasks == ["Exercise", "Read"] 
-    
-def test_remove_middle_task():
-    """Removing task 2 should remove the middle task."""
+
+import pytest 
+from tasktrack import load_tasks, remove_task_by_number, save_tasks 
+
+@pytest.fixture
+def sample_tasks():
+    return ["Study", "Exercise", "Shop"]
+
+def test_remove_first_task(sample_tasks):
     # Arrange
-    tasks = ["Study", "Exercise", "Read"]
+    task_number = 1
+    expected_removed = "Study"
+
+    # Act
+    result = remove_task_by_number(sample_tasks, task_number)
+
+    # Assert
+    assert result == expected_removed
+    assert sample_tasks == ["Exercise", "Shop"]
+    
+def test_remove_middle_task(sample_tasks):
+    """Removing task 2 should remove the middle task."""
+    task_number = 2
     expected_task = "Exercise"
 
     # Act
-    removed_task = remove_task_by_number(tasks, 2)
+    result = remove_task_by_number(sample_tasks, task_number)
 
     # Assert
-    assert removed_task == expected_task
-    assert tasks == ["Study", "Read"]
+    assert result == expected_task
+    assert sample_tasks == ["Study", "Shop"]
 
-
-def test_remove_last_task():
-    """Removing the last task should remove the correct task."""
+def test_remove_last_task(sample_tasks):
     # Arrange
-    tasks = ["Study", "Exercise", "Read"]
-    expected_task = "Read"
+    task_number = 3
+    expected_removed = "Shop"
 
     # Act
-    removed_task = remove_task_by_number(tasks, 3)
+    result = remove_task_by_number(sample_tasks, task_number)
 
     # Assert
-    assert removed_task == expected_task
-    assert tasks == ["Study", "Exercise"]
+    assert result == expected_removed
+    assert sample_tasks == ["Study", "Exercise"]
 
 
-def test_remove_task_number_zero():
-    """Task number 0 should be rejected without changing the list."""
+@pytest.mark.parametrize(
+    "task_number",
+    [
+        0,
+        -1,
+        10,
+    ],
+    ids=[
+        "zero",
+        "negative_number",
+        "number_too_large",
+    ],
+)
+def test_invalid_task_numbers_return_none(task_number):
     # Arrange
-    tasks = ["Study", "Exercise"]
-    expected_tasks = ["Study", "Exercise"]
+    tasks = ["Study", "Exercise", "Shop"]
 
     # Act
-    removed_task = remove_task_by_number(tasks, 0)
+    result = remove_task_by_number(tasks, task_number)
 
     # Assert
-    assert removed_task is None
-    assert tasks == expected_tasks
-
-
-def test_remove_task_number_too_large():
-    """A number beyond the list length should not change the list."""
-    # Arrange
-    tasks = ["Study", "Exercise"]
-    expected_tasks = ["Study", "Exercise"]
-
-    # Act
-    removed_task = remove_task_by_number(tasks, 5)
-
-    # Assert
-    assert removed_task is None
-    assert tasks == expected_tasks
+    assert result is None
+    assert tasks == ["Study", "Exercise", "Shop"] 
     
-def test_remove_negative_task_number():
-    """A negative task number should not change the list."""
+def test_save_tasks_writes_all_tasks(tmp_path):
     # Arrange
-    tasks = ["Study", "Exercise"]
-    expected_tasks = ["Study", "Exercise"]
+    test_file = tmp_path / "tasks.txt"
+    tasks = ["Study", "Exercise", "Shop"]
+    expected_text = "Study\nExercise\nShop\n"
 
     # Act
-    removed_task = remove_task_by_number(tasks, -1)
+    save_tasks(tasks, test_file)
 
     # Assert
-    assert removed_task is None
-    assert tasks == expected_tasks
+    assert test_file.read_text() == expected_text 
+
+def test_load_tasks_reads_all_tasks(tmp_path):
+    # Arrange
+    test_file = tmp_path / "tasks.txt"
+    test_file.write_text("Study\nExercise\nShop\n")
+    expected_tasks = ["Study", "Exercise", "Shop"]
+
+    # Act
+    result = load_tasks(test_file)
+
+    # Assert
+    assert result == expected_tasks
+    
+def test_load_tasks_ignores_blank_lines(tmp_path):
+    # Arrange
+    test_file = tmp_path / "tasks.txt"
+
+    test_file.write_text("Study\n\nExercise\nShop\n")
+    expected_tasks = ["Study", "Exercise", "Shop"]
+
+    # Act
+    result = load_tasks(test_file)
+
+    # Assert
+    assert result == expected_tasks
+
+def test_load_tasks_missing_file_returns_empty_list(tmp_path):
+    #arrange
+    test_file = tmp_path / "missing_tasks.txt"
+    #Act
+    result = load_tasks(test_file)
+    #assert
+    assert result == [] 
+    
+def test_save_and_load_tasks_round_trip(tmp_path):
+    # Arrange
+    tasks = ["Study", "Exercise", "Shop"]
+    test_file = tmp_path / "tasks.txt"
+    
+    #Act
+    save_tasks(tasks, test_file)
+    result = load_tasks(test_file)
+    #assert
+    assert result == tasks 
